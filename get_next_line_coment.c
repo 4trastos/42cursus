@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_coment.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:35:17 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/08 12:20:43 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/08 15:14:03 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	*get_next_line(int fd)
             free(line);
         }
 		line = new_line;
-		line[i++] = buffer;
+		line[i] = buffer;
+		i++;
 	}
 	if (bytes_read == 0 && i == 0)
 	{
@@ -69,4 +70,3 @@ int	main(void)
 	close(fd);
 	return (0);
 }
-
