@@ -6,7 +6,7 @@
 /*   By: davgalle <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:56:12 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/07 22:04:53 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/09 16:57:27 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define GET_NEXT_LINE_H
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
