@@ -36,7 +36,7 @@ char	*get_next_line(int fd)
     i = 0;
     while ((bytes_read = read(fd, &buffer, 1)) > 0)
     {
-		if (i == buffer_size - 1)
+		if (i == buffer_size - 1) // Cambiado a buffer_size - 1 para dejar espacio para '\0'
 		{
 			buffer_size += BUFFER_SIZE;
 			char *new_line = malloc(buffer_size + 1);
