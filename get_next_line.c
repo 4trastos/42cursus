@@ -36,7 +36,7 @@ char	*get_next_line(int fd)
     i = 0;
     while ((bytes_read = read(fd, &buffer, 1)) > 0)
     {
-		if (i == buffer_size)
+		if (i == buffer_size - 1)
 		{
 			buffer_size += BUFFER_SIZE;
 			char *new_line = malloc(buffer_size + 1);
@@ -63,7 +63,7 @@ char	*get_next_line(int fd)
 	line[i] = '\0';
 	return (line);
 }
-/*
+
 int	main(void)
 {
 	int	fd;
@@ -79,4 +79,5 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}*/
+}
+
