@@ -6,7 +6,7 @@
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:35:17 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/09 20:00:37 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/10 15:29:52 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,51 @@
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1024
+# define BUFFER_SIZE 1024
 #endif
 
 char	*get_next_line(int fd)
 {
 	char	*line;
-    char	buffer;
-    int		i;
-    ssize_t	bytes_read;
-    ssize_t	buffer_size = BUFFER_SIZE;
+	char	*new_line;
+	char	buffer;
+	int		i;
+	ssize_t	bytes_read;
+	ssize_t	buffer_size;
 
-    line = malloc(buffer_size + 1);
-    if (!line)
-        return (NULL);
-    i = 0;
-    while ((bytes_read = read(fd, &buffer, 1)) > 0)
-    {
-		if (i == buffer_size - 1) // Cambiado a buffer_size - 1 para dejar espacio para '\0'
+	buffer_size = BUFFER_SIZE;
+	line = malloc(buffer_size + 1);
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (1)
+	{
+		bytes_read = read(fd, &buffer, 1);
+		if (bytes_read > 0)
 		{
-			buffer_size += BUFFER_SIZE;
-			char *new_line = malloc(buffer_size + 1);
-			if (!new_line)
+			if (i == buffer_size - 1)
 			{
+			buffer_size = buffer_size + BUFFER_SIZE;
+			new_line = (char *)malloc(buffer_size);
+				if (!new_line)
+				{
+					free(line);
+					return (NULL);
+				}
+				memcpy(new_line, line, i);
 				free(line);
-				return (NULL);
+				line = new_line;
 			}
-			memcpy(new_line, line, i);
-			free(line);
-			line = new_line;
+			line[i] = buffer;
+			i++;
+			if (buffer == '\n')
+			{
+				break ;
+			}
 		}
-		line[i++] = buffer;
-        if (buffer == '\n')
+		else if (bytes_read <= 0)
 		{
-			break;
+			break ;
 		}
 	}
 	if (bytes_read < 0 || (bytes_read == 0 && i == 0))
@@ -68,7 +79,7 @@ int	main(void)
 {
 	int	fd;
 
-	fd = open("archivo.txt", O_RDONLY);
+	fd = open("get_next_line.c", O_RDONLY);
 
 	char *line;
 
@@ -80,4 +91,3 @@ int	main(void)
 	close(fd);
 	return (0);
 }
-
