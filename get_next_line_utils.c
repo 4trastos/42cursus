@@ -6,7 +6,7 @@
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:34:19 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/20 21:01:12 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/21 19:15:41 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,10 @@ void	ft_bzero(void *s, size_t len)
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*new;
-	size_t	i;
-	size_t	z;
+	int		i;
+	int		z;
 
+	new = NULL;
 	new = (char *)malloc(ft_strlen(s1) + ft_strlen (s2) +1);
 	if (!new)
 		return (NULL);
@@ -96,6 +97,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	new[z] = '\0';
 	return (new);
 }
+
 /* void	*ft_calloc(size_t count, size_t size)
 {
 	size_t	i;
