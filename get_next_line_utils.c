@@ -6,7 +6,7 @@
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:34:19 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/28 12:16:40 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:08:49 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	ft_strlen(char *str)
 	i = 0;
 	if (!str)
 		return (0);
-	while (str[i])
+	while (str[i] != '\0')
 		i++;
 	return (i);
 }
@@ -45,30 +45,26 @@ char	*ft_strchr(char *s, int c)
 char	*ft_strjoin(char *board, char *buffer)
 {
 	size_t	i;
-	size_t	j;
-	char	*str;
+	size_t	z;
+	char	*board_dir;
 
-	if (!board)
+	if (ft_strlen(buffer) == 0)
+		return (board);
+	board_dir = malloc((ft_strlen(board) + ft_strlen(buffer) + 1));
+	if (!board_dir)
 	{
-		board = malloc(1);
-		if (!board)
-			return (NULL);
-		board[0] = '\0';
+		free(board);
+		return (NULL);
 	}
-	if (!board || !buffer)
-		return (NULL);
-	str = malloc((ft_strlen(board) + ft_strlen(buffer) + 1));
-	if (!str)
-		return (NULL);
 	i = -1;
-	j = 0;
 	while (board[++i] != '\0')
-			str[i] = board[i];
-	while (buffer[j] != '\0')
-		str[i++] = buffer[j++];
-	str[i++] = '\0';
+		board_dir[i] = board[i];
+	z = 0;
+	while (buffer[z] != '\0')
+		board_dir[i++] = buffer[z++];
+	board_dir[i] = '\0';
 	free(board);
-	return (str);
+	return (board_dir);
 }
 
 char	*ft_strdup(char *s1)
@@ -91,6 +87,20 @@ char	*ft_strdup(char *s1)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+char	*ft_strcpy(char *dest, const char *src)
+{
+	size_t	i;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }
 /* char	*ft_new_line(char *board)
 {
@@ -116,6 +126,76 @@ char	*ft_strdup(char *s1)
 	while (board[i])
 		new_line[j++] = board[i++];
 	new_line[j] = '\0';
+	free(board);
+	return (new_line);
+} */
+
+/* char	*ft_read(int fd, char *board)
+{
+	char	buffer[BUFFER_SIZE + 1];
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(board);
+			return (NULL);
+		}
+		if (bytes_read == 0)
+			return (board);
+		buffer[bytes_read] = '\0';
+		board = ft_strjoin(board, buffer);
+		if (ft_strchr(board, '\n'))
+			break ;
+	}
+	return (board);
+} */
+/* char	*ft_line(char *board)
+{
+	char	*ln;
+	int		i;
+
+	i = 0;
+	if (!board[i])
+		return (NULL);
+	ln = malloc(ft_strlen(board) + 2);
+	if (!ln)
+		return (NULL);
+	while (board[i] && board[i] != '\n')
+	{
+		ln[i] = board[i];
+		i++;
+	}
+	if (board[i] == '\n')
+	{
+		ln[i] = board[i];
+		i++;
+	}
+	else
+	{
+		free(ln);
+		ln = ft_strdup(board);
+		return (ln);
+	}
+	ln[i] = '\0';
+	return (ln);
+} */
+/* char	*ft_new_line(char *board)
+{
+	char	*new_line;
+
+	if (!board)
+		return (NULL);
+	if (!ft_strchr(board, '\n'))
+	{
+		free(board);
+		return (NULL);
+	}
+	new_line = ft_strchr(board, '\n');
+	new_line = ft_strdup(new_line);
 	free(board);
 	return (new_line);
 } */

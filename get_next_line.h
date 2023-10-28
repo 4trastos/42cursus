@@ -6,7 +6,7 @@
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:56:12 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/28 10:33:19 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/28 14:51:05 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ size_t	ft_strlen(char *str);
 char	*ft_strchr(char *s, int c);
 char	*ft_strjoin(char *board, char *buffer);
 char	*ft_strdup(char *s1);
+char	*ft_strcpy(char *dest, const char *src);
 #endif
