@@ -5,120 +5,100 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/17 15:49:21 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/21 21:28:32 by davgalle         ###   ########.fr       */
+/*   Created: 2023/10/25 17:26:42 by davgalle          #+#    #+#             */
+/*   Updated: 2023/10/28 12:18:24 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-void	*ft_calloc(size_t count, size_t size)
+char	*ft_new_line(char *board)
 {
-	void	*ptr;
+	char	*new_line;
 
-	ptr = (char *)malloc(count * size);
-	if (!ptr)
+	if (!ft_strchr(board, '\n'))
+	{
+		free(board);
 		return (NULL);
-	ft_bzero(ptr, count * size);
-	return (ptr);
+	}
+	if (!board)
+		return (NULL);
+	new_line = ft_strchr(board, '\n');
+	new_line = ft_strdup(new_line);
+	free(board);
+	return (new_line);
 }
 
-char	*ft_read(int fd, char *buffer)
+char	*ft_line(char *board)
 {
-	int		bytes_read;
-	char	frag[BUFFER_SIZE + 1];
-	char	*new;
+	char	*ln;
+	int		i;
 
-	new = NULL;
-	bytes_read = read(fd, frag, BUFFER_SIZE);
-	if (bytes_read > 0)
-		frag[bytes_read] = '\0';
-	if (bytes_read <= 0)
-	{
-		if (buffer)
-			return (buffer);
+	i = 0;
+	if (!board[i])
 		return (NULL);
+	ln = malloc(ft_strlen(board) + 2);
+	if (!ln)
+		return (NULL);
+	while (board[i] && board[i] != '\n')
+	{
+		ln[i] = board[i];
+		i++;
+	}
+	if (board[i] == '\n')
+	{
+		ln[i] = board[i];
+		ln[i +1] = '\0';
 	}
 	else
 	{
-		new = ft_strjoin(buffer, frag);
-		return (new);
+		free(ln);
+		ln = ft_strdup(board);
 	}
+	return (ln);
+}
+
+char	*ft_read(int fd, char *board)
+{
+	char	buffer[BUFFER_SIZE + 1];
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(board);
+			return (NULL);
+		}
+		if (bytes_read == 0)
+			return (board);
+		buffer[bytes_read] = '\0';
+		board = ft_strjoin(board, buffer);
+		if (ft_strchr(board, '\n'))
+			break ;
+	}
+	return (board);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*buffer;
-	char			*line;
-	char			*frag;
-	char			*aux;
-	unsigned long	i;
+	static char	*board;
+	char		*line;
 
-	aux = NULL;
-	if (buffer)
-	{
-		aux = ft_calloc(ft_strlen(buffer), sizeof(char));
-		if (!aux)
-			return (NULL);
-		aux = buffer;
-	}
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!buffer)
+	board = ft_read(fd, board);
+	if (!board)
 		return (NULL);
-	buffer = ft_read(fd, buffer);
-	if (aux)
-		buffer = ft_strjoin(aux, buffer);
-	i = 0;
-	if (buffer[0] == '\0')
-		return (line = NULL);
-	line = ft_calloc((ft_strlen(buffer) + 1), sizeof(char));
-	if (!line)
-		return (NULL);
-	while (i < ft_strlen(buffer) + 1 && buffer[i] != '\0')
-	{
-		if (buffer[i] == '\0')
-		{
-			free(line);
-			line = get_next_line(fd);
-		}
-		if (buffer[i] == '\n' && buffer[i + 1] != '\0')
-		{
-			frag = ft_calloc(ft_strlen(buffer) + 1, sizeof(char));
-			if (!frag)
-				return (NULL);
-			frag = ft_strchr(buffer, '\n');
-			buffer = ft_calloc(ft_strlen(frag), sizeof(char));
-			if (!buffer)
-				return (NULL);
-			buffer = frag;
-			line[i] = '\n';
-			return (line);
-		}
-		if (buffer[i] == '\n' && buffer[i + 1] == '\0')
-		{
-			line[i] = buffer[i];
-			buffer = NULL;
-			aux = NULL;
-			return (line);
-		}
-		line[i] = buffer[i];
-		i++;
-	}
-	buffer = NULL;
+	line = ft_line(board);
+	board = ft_new_line(board);
 	return (line);
 }
-/*
-int main(void)
+/* int main(void)
 {
-	int fd = open("read_error.txt", O_RDONLY);
+	int fd = open("1char.txt", O_RDONLY);
     char *line;
 
      while ((line = get_next_line(fd)) != NULL)
@@ -129,4 +109,4 @@ int main(void)
 
     close(fd);
     return 0;
-}*/
+} */

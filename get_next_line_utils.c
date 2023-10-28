@@ -6,30 +6,30 @@
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 21:34:19 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/21 19:15:41 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:16:40 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (str[i] == '\0')
-	{
+	if (!str)
 		return (0);
-	}
-	while (str[i] != '\0')
+	while (str[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	int	i;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	while (s[i] != '\0')
 	{
@@ -42,87 +42,80 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-void	ft_bzero(void *s, size_t len)
-{
-	unsigned char	*j;
-	size_t			i;
-
-	j = s;
-	i = 0;
-	while (i < len)
-	{
-		j[i] = 0;
-		i++;
-	}
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*new;
-	int		i;
-	int		z;
-
-	new = NULL;
-	new = (char *)malloc(ft_strlen(s1) + ft_strlen (s2) +1);
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		new[i] = s1[i];
-		i++;
-	}
-	z = i;
-	i = 0;
-	while (s2[i] != '\0')
-	{
-		new[z] = s2[i];
-		z++;
-		i++;
-	}
-	new[z] = '\0';
-	return (new);
-}
-
-/* void	*ft_calloc(size_t count, size_t size)
+char	*ft_strjoin(char *board, char *buffer)
 {
 	size_t	i;
-	void	*ptr;
+	size_t	j;
+	char	*str;
 
-	i = count * size;
-	ptr = malloc(i);
-	if (ptr == NULL)
+	if (!board)
 	{
+		board = malloc(1);
+		if (!board)
+			return (NULL);
+		board[0] = '\0';
+	}
+	if (!board || !buffer)
+		return (NULL);
+	str = malloc((ft_strlen(board) + ft_strlen(buffer) + 1));
+	if (!str)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (board[++i] != '\0')
+			str[i] = board[i];
+	while (buffer[j] != '\0')
+		str[i++] = buffer[j++];
+	str[i++] = '\0';
+	free(board);
+	return (str);
+}
+
+char	*ft_strdup(char *s1)
+{
+	int		i;
+	int		len;
+	char	*s2;
+
+	if (!s1)
+		return (NULL);
+	i = 0;
+	len = ft_strlen(s1);
+	s2 = malloc(len + 1);
+	if (!s2)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}
+/* char	*ft_new_line(char *board)
+{
+	int		i;
+	int		j;
+	char	*new_line;
+
+	if (!board)
+		return (NULL);
+	if (!ft_strchr(board, '\n'))
+	{
+		free(board);
 		return (NULL);
 	}
-	ft_bzero(ptr, i);
-	return (ptr);
-} */
-/* char	*ft_strncpy(char *dest, char *src, int n)
-{
-	int	i;
-
 	i = 0;
-	while (i < n)
-	{
-		dest[i] = src[i];
+	j = 0;
+	while (board[i] && board[i] != '\n')
 		i++;
-	}	
-	dest[i] = '\0';
-	return (dest);
-}
- */
+	new_line = malloc(ft_strlen(board) - i + 1);
+	if (!new_line)
+		return (NULL);
+	i++;
+	while (board[i])
+		new_line[j++] = board[i++];
+	new_line[j] = '\0';
+	free(board);
+	return (new_line);
+} */
