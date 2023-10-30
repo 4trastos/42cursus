@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: davgalle <davgalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:26:42 by davgalle          #+#    #+#             */
-/*   Updated: 2023/10/28 20:35:45 by davgalle         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:52:31 by davgalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_new_line(char *board)
 {
@@ -85,37 +85,47 @@ char	*ft_read(int fd, char *board)
 
 char	*get_next_line(int fd)
 {
-	static char	*board;
+	static char	*board[1300];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!board)
+	if (!board[fd])
 	{
-		board = malloc(1);
-		if (!board)
+		board[fd] = malloc(1);
+		if (!board[fd])
 			return (NULL);
-		board[0] = '\0';
+		*board[fd] = '\0';
 	}
-	board = ft_read(fd, board);
-	if (!board)
+	board[fd] = ft_read(fd, board[fd]);
+	if (!board[fd])
 		return (NULL);
-	line = ft_line(board);
-	board = ft_new_line(board);
+	line = ft_line(board[fd]);
+	board[fd] = ft_new_line(board[fd]);
 	return (line);
 }
 
 /* int main(void)
 {	
-	int fd = open("only_nl.txt", O_RDONLY);
-	char *line;
+	const char *files[] = {"read_error.txt", "giant_line.txt", "el_quijote.txt"};
 
-     while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
+	int i = 0;
+	while (i < sizeof(files) / sizeof(files[0]))
+	{
+		int fd = open(files[i], O_RDONLY);
+    	if (fd < 0)
+		{
+      		perror("open");
+      		return 1;
+    	}
 
-    close(fd);
-    return 0;
+    	char *line;
+    	while ((line = get_next_line(fd)) != NULL)
+		{
+      		printf("%s", line);
+      		free(line);
+    	}
+    	close(fd);
+		i++;
+	}
 } */
